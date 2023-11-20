@@ -11,7 +11,9 @@ const Footer = () => {
         <span>{sum} sum</span>
       </div>
       <div className="order-btn">
-        <button onClick={() => navigate("/order")}>Buyurtmani korish</button>
+        <button onClick={() => navigate("/order")}>
+          Buyurtmani korish <i className="bi bi-chevron-right"></i>
+        </button>
       </div>
     </div>
   );

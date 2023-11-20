@@ -1,50 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import FoodContent from "../../components/food-content";
-import Footer from "../../components/footer";
+import { useNavigate, useParams } from "react-router-dom";
 import Alert from "../../components/alert";
+import "./category.scss";
 import {
   addId,
   addOrder,
   addOrderLength,
   addSum,
 } from "../../redux/slice/order-slice";
-import { useNavigate } from "react-router-dom";
+import Footer from "../../components/footer";
 
-const Home = () => {
+const Category = () => {
   const { categories } = useSelector((state) => state.category);
   const { foods } = useSelector((state) => state.food);
-  const { orders, sum, id, orderLength } = useSelector((state) => state.order);
-
-  const [select, setSelect] = useState("all");
-  const [showAlert, setShowAlert] = useState(false);
-  const [food, setFood] = useState("");
   const [menu, setMenu] = useState(false);
+  const { id, sum, orders } = useSelector((state) => state.order);
   const [searchResult, setSearchResult] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [select, setSelect] = useState("all");
+  const [food, setFood] = useState("");
+
+  const { slug } = useParams();
+  const categoryFoods =
+    slug == "all" ? foods : foods.filter((c) => c.category === slug);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const byCategory =
-    select == "all" ? categories : categories.filter((c) => c.title == select);
-  const byFood =
-    select == "all" ? foods : foods.filter((c) => c.category == select);
-
-  const handleOrder = (food) => {
-    setShowAlert(true);
-
-    setFood(food);
-    dispatch(addId([...id, food._id]));
-
-    dispatch(addOrder([...orders, food]));
-  };
-
-  useEffect(() => {
-    const generate = orders.filter((c, idx) => c._id !== id[idx - 1]);
-    dispatch(addOrderLength(generate));
-    const totalSum = eval(orders.map((i) => i.price).join("+"));
-    dispatch(addSum(totalSum));
-  }, [food, id, orders]);
 
   const onTyping = (val) => {
     setSelect(val.length == 0 && "all");
@@ -53,10 +35,25 @@ const Home = () => {
       (c) => c.foodName.slice(0, val.length).toLowerCase() == val
     );
     setSearchResult(data);
+    console.log(menu);
   };
 
+  const handleOrder = (food) => {
+    setShowAlert(true);
+    setFood(food);
+
+    dispatch(addId([...id, food._id]));
+    dispatch(addSum(sum + food.price));
+    dispatch(addOrder([...orders, food]));
+  };
+
+  useEffect(() => {
+    const generate = orders.filter((c, idx) => c._id !== id[idx - 1]);
+    dispatch(addOrderLength(generate));
+  }, [food, id]);
+
   return (
-    <div className="home">
+    <div>
       <Alert
         msg={`siz savatga ${food.foodName}ni qoshdingiz`}
         className={showAlert}
@@ -104,10 +101,11 @@ const Home = () => {
             )}
           </div>
           <div className="category-box">
-            <select onChange={(e) => navigate(`/category/${e.target.value}`)}>
-              <option value="all" selected>
-                Hammasi
-              </option>
+            <select
+              value={slug}
+              onChange={(e) => navigate(`/category/${e.target.value}`)}
+            >
+              <option value="all">Hammasi</option>
               {categories.map((item) => (
                 <option value={item.title} key={item._id}>
                   {item.title}
@@ -117,13 +115,35 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="food-box">
-        {byCategory.map((item) => (
-          <FoodContent
-            category={item.title}
-            addOrder={handleOrder}
-            foods={byFood}
-          />
+      <div className="row">
+        <div className="category-title">{slug}</div>
+        {categoryFoods.map((item) => (
+          <div className="col-lg-6 col-md-6 col-sm-6 col-6" key={item._id}>
+            <div className="food-item h-100" key={item._id}>
+              <div className="food-img">
+                <img
+                  src={`http://localhost:2001/Images/${item.image}`}
+                  className="w-100"
+                  alt=""
+                />
+              </div>
+              <div className="food-info">
+                <h4>{item.foodName}</h4>
+                <div className="row text-start">
+                  <span className="col-3">narxi: </span>
+                  <span className="col-9 text-end ">{item.price} so'm</span>
+                </div>
+              </div>
+              <button onClick={() => handleOrder(item)}>
+                Qo'shish{" "}
+                {`${
+                  orders.filter((c) => c._id == item._id).length > 0
+                    ? orders.filter((c) => c._id == item._id).length
+                    : ""
+                }`}
+              </button>
+            </div>
+          </div>
         ))}
       </div>
       <Footer />
@@ -131,4 +151,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Category;

@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import FoodBox from "./food-box";
 
 const FoodContent = ({ category, foods, addOrder }) => {
   const { orders } = useSelector((state) => state.order);
@@ -15,34 +16,11 @@ const FoodContent = ({ category, foods, addOrder }) => {
             style={{ width: onCategoryFoods.length * 50 + "%" }}
           >
             {onCategoryFoods.map((item) => (
-              <div
-                className="food-item"
-                style={{ width: onCategoryFoods.length == 1 && "100%" }}
-                key={item._id}
-              >
-                <div className="food-img">
-                  <img
-                    src={`http://localhost:2001/Images/${item.image}`}
-                    className="w-100"
-                    alt=""
-                  />
-                </div>
-                <div className="food-info">
-                  <h4>{item.foodName}</h4>
-                  <div className="row text-start">
-                    <span className="col-3">narxi: </span>
-                    <span className="col-9 text-end ">{item.price} so'm</span>
-                  </div>
-                </div>
-                <button onClick={() => addOrder(item)}>
-                  Qo'shish{" "}
-                  {`${
-                    orders.filter((c) => c._id == item._id).length > 0
-                      ? orders.filter((c) => c._id == item._id).length
-                      : ""
-                  }`}
-                </button>
-              </div>
+              <FoodBox
+                item={item}
+                onCategoryFoods={onCategoryFoods}
+                addOrder={addOrder}
+              />
             ))}
           </div>
         </div>

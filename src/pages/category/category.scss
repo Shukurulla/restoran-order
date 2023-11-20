@@ -1,0 +1,33 @@
+.food-item {
+  font-size: 13px;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: 0px 0px 5px #cecdcd;
+  padding-bottom: 10px;
+  .food-info {
+    padding: 10px 10px;
+    font-weight: 600;
+    h4 {
+      font-size: 17px;
+    }
+    h5 {
+      font-size: 13px !important;
+      font-weight: 600;
+    }
+  }
+  img {
+    height: 120px;
+  }
+}
+button {
+  width: 90%;
+  display: block;
+  background-color: #006333;
+  border-radius: 45pc;
+  border: none;
+  color: #fff;
+  padding: 4px 0;
+  margin: 0 auto;
+}

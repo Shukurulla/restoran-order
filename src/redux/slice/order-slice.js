@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   orders: [],
   sum: 0,
+  id: [],
+  orderLength: 0,
 };
 
 const orderSlice = createSlice({
@@ -15,8 +17,14 @@ const orderSlice = createSlice({
     addSum: (state, action) => {
       state.sum = action.payload;
     },
+    addId: (state, action) => {
+      state.id = action.payload;
+    },
+    addOrderLength: (state, action) => {
+      state.orderLength = action.payload;
+    },
   },
 });
 
-export const { addOrder, addSum } = orderSlice.actions;
+export const { addOrder, addSum, addId, addOrderLength } = orderSlice.actions;
 export default orderSlice.reducer;

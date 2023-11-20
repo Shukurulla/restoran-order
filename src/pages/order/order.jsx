@@ -15,6 +15,7 @@ const Order = () => {
     orderedAt: new Date(),
     selectFoods: orderLength,
     allOrders: orders,
+    totalPrice: sum,
     location: {
       lat: localStorage.getItem("lat"),
       lon: localStorage.getItem("lon"),
@@ -32,7 +33,6 @@ const Order = () => {
       if (data) {
         setStatus("success");
         setMsg(!msg);
-        window.location.reload();
       }
     } catch (error) {
       console.log(error);

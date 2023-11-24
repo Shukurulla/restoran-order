@@ -50,7 +50,7 @@ const OrderBox = ({ item }) => {
       <i className="bi bi-x-lg" onClick={() => removeOrder()}></i>
       <div className="img-box">
         <img
-          src={`http://localhost:2001/Images/${item.image}`}
+          src={`https://restoran-service.onrender.com/Images/${item.image}`}
           alt={item.foodName}
           className="w-100"
         />
@@ -75,7 +75,9 @@ const OrderBox = ({ item }) => {
             </div>
           </div>
         </div>
-        <div className="order-price">{item.price * length}</div>
+        <div className="order-price">
+          {(item.price * length) / 1000 + ".000"}
+        </div>
       </div>
     </div>
   );

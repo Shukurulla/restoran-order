@@ -50,7 +50,7 @@ const Home = () => {
     setSelect(val.length == 0 && "all");
     setMenu(val && true);
     const data = foods.filter(
-      (c) => c.foodName.slice(0, val.length).toLowerCase() == val
+      (c) => c.foodName.slice(0, val.length).toLowerCase() == val.toLowerCase()
     );
     setSearchResult(data);
   };
@@ -64,6 +64,7 @@ const Home = () => {
       />
       <div className="category-box">
         <div className="category-content">
+          Logo
           <div className="search-box">
             <input
               type="text"
@@ -103,19 +104,20 @@ const Home = () => {
               </div>
             )}
           </div>
-          <div className="category-box">
-            <select onChange={(e) => navigate(`/category/${e.target.value}`)}>
-              <option value="all" selected>
-                Hammasi
-              </option>
-              {categories.map((item) => (
-                <option value={item.title} key={item._id}>
-                  {item.title}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
+      </div>
+      <div className="category-box">
+        <span>Kategoriyalar</span>
+        <select onChange={(e) => navigate(`/category/${e.target.value}`)}>
+          <option value="all" selected>
+            Hammasi
+          </option>
+          {categories.map((item) => (
+            <option value={item.title} key={item._id}>
+              {item.title}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="food-box">
         {byCategory.map((item) => (

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +9,7 @@ const Footer = () => {
     <div className="footer">
       <div className="price-content">
         <i className="bi bi-cart4"></i>
-        <span>{sum} sum</span>
+        <span>{sum ? sum : "0"} sum</span>
       </div>
       <div className="order-btn">
         <button onClick={() => navigate("/order")}>

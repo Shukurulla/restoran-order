@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 
 const FoodBox = ({ item, onCategoryFoods, addOrder }) => {
   const { orders } = useSelector((state) => state.order);
+
   return (
     <div
       className="food-item"
@@ -11,8 +12,7 @@ const FoodBox = ({ item, onCategoryFoods, addOrder }) => {
     >
       <div className="food-img">
         <img
-          src={`http://localhost:2001/Images/${item.image}`}
-          className="w-100"
+          src={`https://spng.pngfind.com/pngs/s/73-734350_food-dish-top-view-png-food-banner-psd.png`}
           alt=""
         />
       </div>
@@ -20,8 +20,11 @@ const FoodBox = ({ item, onCategoryFoods, addOrder }) => {
         <h4>{item.foodName}</h4>
         <div className="row text-start">
           <span className="col-3">narxi: </span>
-          <span className="col-9 text-end ">{item.price} so'm</span>
+          <span className="col-9 text-end ">
+            {item.price / 1000 + ".000"} so'm
+          </span>
         </div>
+        <p className="pt-2">Lorem, ipsum dolor sit amet consectetur </p>
       </div>
       <button onClick={() => addOrder(item)}>
         Qo'shish{" "}

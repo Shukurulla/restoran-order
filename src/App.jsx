@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.scss";
 import Bearer from "./components/bearer";
 import Category from "./pages/category/category";
@@ -60,9 +60,7 @@ function App() {
     getTable();
   }, []);
 
-  return localStorage.getItem("tableId") == undefined ? (
-    <Bearer />
-  ) : (
+  return (
     <>
       <div className="container">
         <Routes>

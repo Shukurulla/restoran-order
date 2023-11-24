@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { setTableId } from "../redux/slice/tables";
 
 const Bearer = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
-  const { tables } = useSelector((state) => state.table);
+  const { tables, tableId } = useSelector((state) => state.table);
   const navigate = useNavigate();
-
-  const auth = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    }
-
-    function showPosition(position) {
-      localStorage.setItem("lat", position.coords.latitude);
-      localStorage.setItem("lon", position.coords.longitude);
-    }
-    localStorage.setItem("tableId", id);
-  };
+  const [msg, setMsg] = useState(false);
 
   useEffect(() => {
-    if (tables.filter((c) => c._id === id)) {
-      auth();
-      navigate("/");
-    }
+    dispatch(setTableId(id));
   }, []);
+  setTimeout(() => {
+    tables.map((item) => {
+      if (item._id === id) {
+        localStorage.setItem("tableId", id);
+        navigate("/");
+      } else {
+        setMsg(!msg);
+      }
+    });
+  }, 1000);
 
   return (
     <div className="bearer ">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
+      {!msg ? (
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      ) : (
+        <div>Kechirasiz bu stolning id sini topolmadik</div>
+      )}
     </div>
   );
 };

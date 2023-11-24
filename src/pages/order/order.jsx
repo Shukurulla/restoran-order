@@ -1,43 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import MsgBox from "../../components/msg-box";
 import OrderBox from "../../components/order-box";
+import { addOrder, addSum } from "../../redux/slice/order-slice";
 import OrderService from "../../service/order";
 
 const Order = () => {
   const { orders, sum, id, orderLength } = useSelector((state) => state.order);
+  const { tables } = useSelector((state) => state.table);
   const navigate = useNavigate();
   const [msg, setMsg] = useState(false);
   const [status, setStatus] = useState("");
+  const [lat, setLat] = useState("");
+  const [lon, setLon] = useState("");
+  const dispatch = useDispatch();
+  const [isWarning, setIsWarning] = useState(false);
+
+  const tableId = localStorage.getItem("tableId");
+  const tableName = tables?.filter((c) => c._id == tableId)[0]?.title;
+
+  const auth = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    }
+
+    function showPosition(position) {
+      setLat(position.coords.latitude);
+      setLon(position.coords.longitude);
+    }
+  };
 
   const formData = {
     orderedAt: new Date(),
     selectFoods: orderLength,
     allOrders: orders,
-    totalPrice: sum,
+    totalPrice: sum + sum * 0.15,
     location: {
-      lat: localStorage.getItem("lat"),
-      lon: localStorage.getItem("lon"),
+      lat,
+      lon,
     },
-    tableId: localStorage.getItem("tableId"),
+
+    tableId: tableId,
+    tableName,
   };
 
   if (!orderLength.length) {
     navigate("/");
   }
 
+  useEffect(() => {
+    auth();
+    console.log(tableName);
+  }, [!isWarning]);
+
   const onOrder = async () => {
-    try {
+    if (lat.length == 0 && lon.length == 0) {
+      const warning = confirm("Joylashuvga ruxsat berishingiz kerak");
+      if (warning) {
+        setIsWarning(true);
+        navigate("/");
+        window.location.reload();
+      }
+    } else if (tableName === undefined) {
+      alert("Bunday stol topilmadi!! Iltimos QR Codni qaytadan skanerlan");
+    } else {
       const { data } = await OrderService.postOrder(formData);
       if (data) {
+        setMsg(true);
         setStatus("success");
-        setMsg(!msg);
+        dispatch(addOrder([]));
+        dispatch(addSum([]));
       }
-    } catch (error) {
-      console.log(error);
-      setStatus("failure");
-      setMsg(!msg);
     }
   };
 
@@ -51,9 +85,13 @@ const Order = () => {
           <i className="bi bi-list"></i>
         </Link>
       </div>
-      {orderLength?.map((item) => (
-        <OrderBox item={item} />
-      ))}
+      <div className="order-content">
+        {orderLength ? (
+          orderLength?.map((item) => <OrderBox item={item} />)
+        ) : (
+          <p>Buyurtmalar mavjud emas</p>
+        )}
+      </div>
       <div className="footer-order">
         <div className="order-total-info">
           <div className="service-total">

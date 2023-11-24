@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Alert from "../../components/alert";
 import "./category.scss";
 import {
@@ -32,7 +32,7 @@ const Category = () => {
     setSelect(val.length == 0 && "all");
     setMenu(val && true);
     const data = foods.filter(
-      (c) => c.foodName.slice(0, val.length).toLowerCase() == val
+      (c) => c.foodName.slice(0, val.length).toLowerCase() == val.toLowerCase()
     );
     setSearchResult(data);
     console.log(menu);
@@ -40,13 +40,20 @@ const Category = () => {
 
   const handleOrder = (food) => {
     setShowAlert(true);
-    setFood(food);
 
+    setFood(food);
     dispatch(addId([...id, food._id]));
-    dispatch(addSum(sum + food.price));
+    const totalSum = eval(orders.map((i) => i.price).join("+"));
+    dispatch(addSum(totalSum));
     dispatch(addOrder([...orders, food]));
   };
 
+  useEffect(() => {
+    const generate = orders.filter((c, idx) => c._id !== id[idx - 1]);
+    dispatch(addOrderLength(generate));
+    const totalSum = eval(orders.map((i) => i.price).join("+"));
+    dispatch(addSum(totalSum));
+  }, [food, id, orders]);
   useEffect(() => {
     const generate = orders.filter((c, idx) => c._id !== id[idx - 1]);
     dispatch(addOrderLength(generate));
@@ -61,6 +68,10 @@ const Category = () => {
       />
       <div className="category-box">
         <div className="category-content">
+          <Link to={"/"} className="main-menu">
+            <i className="bi bi-arrow-left"></i>
+            <span>Bosh menu</span>
+          </Link>
           <div className="search-box">
             <input
               type="text"
@@ -100,29 +111,31 @@ const Category = () => {
               </div>
             )}
           </div>
-          <div className="category-box">
-            <select
-              value={slug}
-              onChange={(e) => navigate(`/category/${e.target.value}`)}
-            >
-              <option value="all">Hammasi</option>
-              {categories.map((item) => (
-                <option value={item.title} key={item._id}>
-                  {item.title}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
       </div>
-      <div className="row">
-        <div className="category-title">{slug}</div>
+      <div className="category-box">
+        <select
+          value={slug}
+          onChange={(e) => navigate(`/category/${e.target.value}`)}
+        >
+          <option value="all">Hammasi</option>
+          {categories.map((item) => (
+            <option value={item.title} key={item._id}>
+              {item.title}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="row pb-6">
+        <div className="category-title ">
+          {slug === "all" ? "Hammasi" : slug}
+        </div>
         {categoryFoods.map((item) => (
-          <div className="col-lg-6 col-md-6 col-sm-6 col-6" key={item._id}>
+          <div className="col-lg-6 col-md-6 col-sm-6 col-6 mb-2" key={item._id}>
             <div className="food-item h-100" key={item._id}>
               <div className="food-img">
                 <img
-                  src={`http://localhost:2001/Images/${item.image}`}
+                  src={`https://restoran-service.onrender.com/Images/${item.image}`}
                   className="w-100"
                   alt=""
                 />

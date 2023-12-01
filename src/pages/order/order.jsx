@@ -7,39 +7,24 @@ import { addOrder, addSum } from "../../redux/slice/order-slice";
 import OrderService from "../../service/order";
 
 const Order = () => {
-  const { orders, sum, id, orderLength } = useSelector((state) => state.order);
+  const { orders, sum, orderLength } = useSelector((state) => state.order);
   const { tables } = useSelector((state) => state.table);
+
   const navigate = useNavigate();
   const [msg, setMsg] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [status, setStatus] = useState("");
-  const [lat, setLat] = useState("");
-  const [lon, setLon] = useState("");
   const dispatch = useDispatch();
-  const [isWarning, setIsWarning] = useState(false);
+  const f = new Intl.NumberFormat("es-DE");
 
   const tableId = localStorage.getItem("tableId");
   const tableName = tables?.filter((c) => c._id == tableId)[0]?.title;
-
-  const auth = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    }
-
-    function showPosition(position) {
-      setLat(position.coords.latitude);
-      setLon(position.coords.longitude);
-    }
-  };
 
   const formData = {
     orderedAt: new Date(),
     selectFoods: orderLength,
     allOrders: orders,
     totalPrice: sum + sum * 0.15,
-    location: {
-      lat,
-      lon,
-    },
 
     tableId: tableId,
     tableName,
@@ -49,22 +34,9 @@ const Order = () => {
     navigate("/");
   }
 
-  useEffect(() => {
-    auth();
-    console.log(tableName);
-  }, [!isWarning]);
-
   const onOrder = async () => {
-    if (lat.length == 0 && lon.length == 0) {
-      const warning = confirm("Joylashuvga ruxsat berishingiz kerak");
-      if (warning) {
-        setIsWarning(true);
-        navigate("/");
-        window.location.reload();
-      }
-    } else if (tableName === undefined) {
-      alert("Bunday stol topilmadi!! Iltimos QR Codni qaytadan skanerlan");
-    } else {
+    setDisabled(true);
+    try {
       const { data } = await OrderService.postOrder(formData);
       if (data) {
         setMsg(true);
@@ -72,6 +44,8 @@ const Order = () => {
         dispatch(addOrder([]));
         dispatch(addSum([]));
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -80,7 +54,9 @@ const Order = () => {
   ) : (
     <div className="order">
       <div className="order-header py-3">
-        <p className="m-0 p-0">Logo</p>
+        <p className="m-0 p-0" onClick={() => navigate("/")}>
+          <i className="bi bi-arrow-left"></i>
+        </p>
         <Link to={"/"}>
           <i className="bi bi-list"></i>
         </Link>
@@ -96,15 +72,19 @@ const Order = () => {
         <div className="order-total-info">
           <div className="service-total">
             <b>Hizmat korsatish narxi: </b>
-            <span className="">{sum * 0.15}</span>
+            <span className="">{f.format(sum * 0.15)} so'm</span>
           </div>
           <p className="text-danger">
-            Bandlik uchun soatiga 10000 sum qoshiladi{" "}
+            Bandlik uchun soatiga 10.000 so'm qoshiladi{" "}
           </p>
         </div>
         <div className="total-price">
-          <b className="text-success">Umumiy hisob: {sum + sum * 0.15}</b>
-          <button onClick={() => onOrder()}>Buyurtma berish</button>
+          <b className="text-success">
+            Umumiy hisob: {f.format(sum + sum * 0.15)} so'm
+          </b>
+          <button disabled={disabled} onClick={() => onOrder()}>
+            Buyurtma berish
+          </button>
         </div>
       </div>
     </div>

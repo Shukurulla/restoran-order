@@ -12,7 +12,7 @@ const MsgBox = ({ status }) => {
         ></i>
         <p>
           {status == "success"
-            ? "Tez orada buyurmangiz yetkaziladi"
+            ? "Tez orada buyurtmangiz yetkaziladi"
             : "Kechirasiz hatolik yuz berdi"}
         </p>
         <Link to={"/"}>Menuga qaytish</Link>

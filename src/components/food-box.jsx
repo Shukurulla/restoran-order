@@ -12,19 +12,20 @@ const FoodBox = ({ item, onCategoryFoods, addOrder }) => {
     >
       <div className="food-img">
         <img
-          src={`https://spng.pngfind.com/pngs/s/73-734350_food-dish-top-view-png-food-banner-psd.png`}
+          src={`https://restoran-service.onrender.com/Images/${item.image}`}
           alt=""
         />
       </div>
       <div className="food-info">
-        <h4>{item.foodName}</h4>
-        <div className="row text-start">
-          <span className="col-3">narxi: </span>
-          <span className="col-9 text-end ">
-            {item.price / 1000 + ".000"} so'm
-          </span>
+        <div className="navigate">
+          <h4>{item.foodName}</h4>
         </div>
-        <p className="pt-2">Lorem, ipsum dolor sit amet consectetur </p>
+        <div className="d-flex mt-2 justify-content-between align-items-center text-start">
+          <span className="text-orange ">
+            <i className="bi bi-currency-dollar"></i> Narxi:{" "}
+          </span>
+          <span className="text-end ">{item.price / 1000 + ".000"} so'm</span>
+        </div>
       </div>
       <button onClick={() => addOrder(item)}>
         Qo'shish{" "}

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ import {
   getFoodSuccess,
 } from "./redux/slice/food-slice";
 import { getTables } from "./redux/slice/tables";
+import { getDevice, getIpAddress } from "./redux/slice/user";
 import CategoryService from "./service/category-service";
 import FoodService from "./service/food-service";
 import TableService from "./service/tables";
@@ -54,14 +56,26 @@ function App() {
     }
   };
 
+  const getLocationIp = () => {
+    axios
+      .get(
+        "https://geolocation-db.com/json/0daad5e0-82e7-11ee-92e0-f5d620c7dcb4"
+      )
+      .then(({ data }) => {
+        dispatch(getIpAddress(data.IPv4));
+      });
+  };
+
   useEffect(() => {
     getCategory();
     getFoods();
     getTable();
+    getLocationIp();
+    dispatch(getDevice(navigator.userAgent));
   }, []);
 
   return (
-    <>
+    <div className="body">
       <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -70,7 +84,7 @@ function App() {
           <Route path="/menu/table/:id" element={<Bearer />} />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 

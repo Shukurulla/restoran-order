@@ -3,6 +3,7 @@ import CategoryReducer from "../slice/category-slice";
 import FoodReducer from "../slice/food-slice";
 import OrderReducer from "../slice/order-slice";
 import TableReducer from "../slice/tables";
+import UserReducer from "../slice/user";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     food: FoodReducer,
     order: OrderReducer,
     table: TableReducer,
+    user: UserReducer,
   },
   devTools: process.env.NODE_ENV != "production",
 });

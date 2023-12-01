@@ -61,7 +61,7 @@ const OrderBox = ({ item }) => {
           <span>Miqdori: </span>
           <div className="counter-box">
             <input
-              className="btn-update minus bg-danger"
+              className="btn-update minus bg-dark"
               onClick={() =>
                 equalOrders.length > 1 ? deleteOrder(item) : console.log("1")
               }
@@ -76,7 +76,7 @@ const OrderBox = ({ item }) => {
           </div>
         </div>
         <div className="order-price">
-          {(item.price * length) / 1000 + ".000"}
+          {(item.price * length) / 1000 + ".000"} so'm
         </div>
       </div>
     </div>

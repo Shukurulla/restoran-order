@@ -73,10 +73,12 @@ const Category = () => {
     dispatch(addOrderLength(generate));
   }, [food, id]);
 
+  const f = new Intl.NumberFormat("es-sp");
+
   return (
     <div>
       <Alert
-        msg={`siz savatga ${food.foodName}ni qoshdingiz`}
+        msg={`Siz savatga ${food.foodName}ni qoshdingiz`}
         className={showAlert}
         setState={setShowAlert}
       />
@@ -98,7 +100,7 @@ const Category = () => {
       <div className="category-content">
         <div
           className="categories"
-          style={{ width: categories.length * 30 + "%" }}
+          style={{ width: categories.length * 25 + "%" }}
         >
           <div
             className={`category-item ${slug == "all" ? "active" : ""}`}
@@ -145,7 +147,9 @@ const Category = () => {
                 <h4>{item.foodName}</h4>
                 <div className="row text-start">
                   <span className="col-3">narxi: </span>
-                  <span className="col-9 text-end ">{item.price} so'm</span>
+                  <span className="col-9 text-end ">
+                    {f.format(item.price)} so'm
+                  </span>
                 </div>
               </div>
               <button onClick={() => handleOrder(item)}>

@@ -47,7 +47,7 @@ const Home = () => {
   return (
     <div className="home">
       <Alert
-        msg={`siz savatga ${food.foodName}ni qoshdingiz`}
+        msg={`Siz savatga ${food.foodName}ni qoshdingiz`}
         className={showAlert}
         setState={setShowAlert}
       />
@@ -63,7 +63,7 @@ const Home = () => {
       <div className="category-content">
         <div
           className="categories"
-          style={{ width: categories.length * 30 + "%" }}
+          style={{ width: categories.length * 25 + "%" }}
         >
           <div
             className={`category-item ${select == "all" ? "active" : ""}`}

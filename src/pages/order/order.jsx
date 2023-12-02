@@ -62,17 +62,22 @@ const Order = () => {
         </Link>
       </div>
       <div className="order-content">
-        {orderLength ? (
+        {orderLength.length > 0 ? (
           orderLength?.map((item) => <OrderBox item={item} />)
         ) : (
-          <p>Buyurtmalar mavjud emas</p>
+          <div className="result">
+            <p>Buyurtmalar mavjud emas</p>
+            <button onClick={() => navigate("/")}>Buyurtma berish</button>
+          </div>
         )}
       </div>
       <div className="footer-order">
         <div className="order-total-info">
           <div className="service-total">
             <b>Hizmat korsatish narxi: </b>
-            <span className="">{f.format(sum * 0.15)} so'm</span>
+            <span className="">
+              {isNaN(f.format(sum * 0.15)) ? 0 : f.format(sum * 0.15)} so'm
+            </span>
           </div>
           <p className="text-danger">
             Bandlik uchun soatiga 10.000 so'm qoshiladi{" "}
@@ -80,7 +85,9 @@ const Order = () => {
         </div>
         <div className="total-price">
           <b className="text-success">
-            Umumiy hisob: {f.format(sum + sum * 0.15)} so'm
+            Umumiy hisob:{" "}
+            {isNaN(f.format(sum + sum * 0.15)) ? 0 : f.format(sum + sum * 0.15)}{" "}
+            so'm
           </b>
           <button disabled={disabled} onClick={() => onOrder()}>
             Buyurtma berish

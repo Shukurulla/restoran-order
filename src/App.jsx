@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.scss";
@@ -25,6 +25,9 @@ import TableService from "./service/tables";
 
 function App() {
   const dispatch = useDispatch();
+  const { foods } = useSelector((state) => state.food);
+  const { categories } = useSelector((state) => state.category);
+  const isLoading = foods.length > 0 && categories.length > 0 ? false : true;
 
   const getCategory = async () => {
     dispatch(getCategoryStart());
@@ -74,7 +77,13 @@ function App() {
     dispatch(getDevice(navigator.userAgent));
   }, []);
 
-  return (
+  return isLoading ? (
+    <div className="bearer">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  ) : (
     <div className="body">
       <div className="container">
         <Routes>

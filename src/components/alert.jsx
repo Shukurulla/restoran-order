@@ -6,7 +6,11 @@ const Alert = ({ msg, className, setState }) => {
   }, [4000]);
   return (
     <div className={`alert ${className && "show"}`}>
-      {msg} <i className="bi bi-x" onClick={() => setState(false)}></i>
+      {msg}
+      <i
+        className="bi bi-check2-circle text-success"
+        onClick={() => setState(false)}
+      ></i>
     </div>
   );
 };

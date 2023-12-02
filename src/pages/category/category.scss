@@ -68,7 +68,16 @@ button {
   position: relative;
   overflow-x: scroll;
   overflow-y: hidden;
-
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 45pc;
+  }
+  &::-webkit-scrollbar-track-piece {
+    display: none;
+  }
   height: 75px;
   .categories {
     display: flex;

@@ -6,11 +6,11 @@ const MsgBox = ({ status }) => {
     <div className={`msg ${status == "success" ? "success" : "failure"}`}>
       <div className="msg-box">
         <i
-          className={`bi ${
+          className={`bi text-success ${
             status == "success" ? "bi-check2-circle" : "bi-x-circle text-danger"
           }`}
         ></i>
-        <p>
+        <p className="text-center">
           {status == "success"
             ? "Tez orada buyurtmangiz yetkaziladi"
             : "Kechirasiz hatolik yuz berdi"}

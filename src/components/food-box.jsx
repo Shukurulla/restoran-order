@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 
 const FoodBox = ({ item, onCategoryFoods, addOrder }) => {
   const { orders } = useSelector((state) => state.order);
+  const hour = new Date().getHours();
+  const f = new Intl.NumberFormat("es-sp");
 
   return (
     <div
@@ -11,20 +13,17 @@ const FoodBox = ({ item, onCategoryFoods, addOrder }) => {
       key={item._id}
     >
       <div className="food-img">
-        <img
-          src={`https://restoran-service.onrender.com/Images/${item.image}`}
-          alt=""
-        />
+        <img src={item.image} alt="" />
       </div>
       <div className="food-info">
         <div className="navigate">
-          <h4>{item.foodName}</h4>
+          <h5 className="p-0 m-0">{item.foodName}</h5>
         </div>
+        <div className="d-flex mt-2 justify-content-between align-items-center text-start"></div>
         <div className="d-flex mt-2 justify-content-between align-items-center text-start">
-          <span className="text-orange ">
-            <i className="bi bi-currency-dollar"></i> Narxi:{" "}
-          </span>
-          <span className="text-end ">{item.price / 1000 + ".000"} so'm</span>
+          <span className="text-orange ">Narxi: </span>
+
+          <span className="text-end">{f.format(item.price)}so'm</span>
         </div>
       </div>
       <button onClick={() => addOrder(item)}>

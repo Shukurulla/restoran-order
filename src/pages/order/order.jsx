@@ -5,10 +5,18 @@ import MsgBox from "../../components/msg-box";
 import OrderBox from "../../components/order-box";
 import { addOrder, addSum } from "../../redux/slice/order-slice";
 import OrderService from "../../service/order";
+import "./order.scss";
+import Unknown from "./unknown";
+import io from "socket.io-client";
+
+const socket = io.connect("https://restoran-service.onrender.com");
 
 const Order = () => {
   const { orders, sum, orderLength } = useSelector((state) => state.order);
   const { tables } = useSelector((state) => state.table);
+  const { discount } = useSelector((state) => state.discount);
+  const { musics } = useSelector((state) => state.music);
+  const { ofitsiantService } = useSelector((state) => state.ofitsiant);
 
   const navigate = useNavigate();
   const [msg, setMsg] = useState(false);
@@ -16,36 +24,52 @@ const Order = () => {
   const [status, setStatus] = useState("");
   const dispatch = useDispatch();
   const f = new Intl.NumberFormat("es-DE");
+  const { ipAddress } = useSelector((state) => state.user);
+  const hour = new Date().getHours();
 
   const tableId = localStorage.getItem("tableId");
   const tableName = tables?.filter((c) => c._id == tableId)[0]?.title;
+  const tableSurcharge = tables?.filter((c) => c._id == tableId)[0]?.surcharge;
+  const lat = localStorage.getItem("lat");
+  const lon = localStorage.getItem("lon");
+  const [unknown, setUnknown] = useState(false);
 
   const formData = {
     orderedAt: new Date(),
     selectFoods: orderLength,
     allOrders: orders,
-    totalPrice: sum + sum * 0.15,
-
+    totalPrice: sum,
+    agent: {
+      lat,
+      lon,
+    },
     tableId: tableId,
     tableName,
+    discount: hour > 11 && hour < 16 ? true : false,
+    userInfo: ipAddress,
+    surcharge: tableSurcharge,
   };
 
-  if (!orderLength.length) {
-    navigate("/");
-  }
-
   const onOrder = async () => {
-    setDisabled(true);
-    try {
-      const { data } = await OrderService.postOrder(formData);
-      if (data) {
-        setMsg(true);
-        setStatus("success");
-        dispatch(addOrder([]));
-        dispatch(addSum([]));
+    if (!lat && !lon) {
+      setUnknown(true);
+    } else {
+      setDisabled(true);
+      try {
+        socket.emit("post_order", formData);
+        socket.on("get_order", (data) => {
+          if (data) {
+            setMsg(true);
+            localStorage.removeItem("lat");
+            localStorage.removeItem("lon");
+            setStatus("success");
+            dispatch(addOrder([]));
+            dispatch(addSum([]));
+          }
+        });
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -53,41 +77,51 @@ const Order = () => {
     <MsgBox status={status} />
   ) : (
     <div className="order">
+      {unknown && <Unknown setState={setUnknown} />}
       <div className="order-header py-3">
-        <p className="m-0 p-0" onClick={() => navigate("/")}>
+        <p className="m-0 p-0" onClick={() => navigate("/home")}>
           <i className="bi bi-arrow-left"></i>
         </p>
-        <Link to={"/"}>
+        <Link to={"/home"}>
           <i className="bi bi-list"></i>
         </Link>
       </div>
       <div className="order-content">
-        {orderLength.length > 0 ? (
-          orderLength?.map((item) => <OrderBox item={item} />)
-        ) : (
-          <div className="result">
-            <p>Buyurtmalar mavjud emas</p>
-            <button onClick={() => navigate("/")}>Buyurtma berish</button>
+        {orderLength.length > 0 && (
+          <div className="relative">
+            <h4 className="text-light">Ovqatlar</h4>
+            {orderLength?.map((item) => (
+              <OrderBox item={item} />
+            ))}
           </div>
         )}
       </div>
+
+      {orderLength.length == 0 && musics.length == 0 ? (
+        <div className="order-msg relative text-light">
+          Buyurtmalar mavjud emas
+        </div>
+      ) : (
+        ""
+      )}
       <div className="footer-order">
         <div className="order-total-info">
-          <div className="service-total">
-            <b>Hizmat korsatish narxi: </b>
-            <span className="">
-              {isNaN(f.format(sum * 0.15)) ? 0 : f.format(sum * 0.15)} so'm
-            </span>
-          </div>
+          <div className="service-total"></div>
           <p className="text-danger">
-            Bandlik uchun soatiga 10.000 so'm qoshiladi{" "}
+            Bandlik uchun soatiga {f.format(tableSurcharge)} so'm qoshiladi{" "}
           </p>
+          {hour > 11 && hour < 15 ? (
+            <p className="text-danger">
+              Chegirma 10% : Umumiy hisobdan 10% qaytariladi
+            </p>
+          ) : (
+            ""
+          )}
         </div>
         <div className="total-price">
           <b className="text-success">
-            Umumiy hisob:{" "}
-            {isNaN(f.format(sum + sum * 0.15)) ? 0 : f.format(sum + sum * 0.15)}{" "}
-            so'm
+            Umumiy hisob:
+            {isNaN(f.format(sum)) ? 0 : f.format(sum)} so'm
           </b>
           <button disabled={disabled} onClick={() => onOrder()}>
             Buyurtma berish

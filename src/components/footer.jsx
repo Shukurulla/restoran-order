@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const { sum } = useSelector((state) => state.order);
+  const { tables } = useSelector((state) => state.table);
   const navigate = useNavigate("");
   const f = new Intl.NumberFormat("es-sp");
+  const tableId = localStorage.getItem("tableId");
+  const currentTable = tables.filter((c) => c._id == tableId)[0];
 
   return (
     <div className="footer">

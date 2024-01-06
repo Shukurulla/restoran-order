@@ -13,6 +13,8 @@ const OrderBox = ({ item }) => {
   const length = orders.filter((c) => c._id === item._id).length;
   const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(false);
+  const f = new Intl.NumberFormat("es-sp");
+  const hour = new Date().getHours();
 
   if (val < 1) {
     setVal(1);
@@ -49,11 +51,7 @@ const OrderBox = ({ item }) => {
     <div className="order-box">
       <i className="bi bi-x-lg" onClick={() => removeOrder()}></i>
       <div className="img-box">
-        <img
-          src={`https://restoran-service.onrender.com/Images/${item.image}`}
-          alt={item.foodName}
-          className="w-100"
-        />
+        <img src={item.image} alt={item.foodName} className="w-100" />
       </div>
       <div className="order-info">
         <div className="order-title">{item.foodName}</div>
@@ -75,8 +73,9 @@ const OrderBox = ({ item }) => {
             </div>
           </div>
         </div>
-        <div className="order-price">
-          {(item.price * length) / 1000 + ".000"} so'm
+        <div className="order-price d-flex align-items-center justify-content-between">
+          <p>Narxi: </p>
+          <p>{f.format(item.price * length)} so'm</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,18 @@
+.check-content {
+  margin: auto;
+  padding-top: 30px;
+  background-color: #212a2f;
+  box-shadow: 2px 2px 15px #0b0d0ea4;
+  padding-bottom: 40px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  .check {
+    font-size: 14px;
+    p.report {
+      margin: 0;
+      padding: 0;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+  }
+}

@@ -10,18 +10,25 @@ import {
   addSum,
 } from "../../redux/slice/order-slice";
 import { useNavigate } from "react-router-dom";
+import microphone from "../../../public/microphone.png";
+import hamburger from "../../../public/hamburger.png";
 
 const Home = () => {
   const { categories } = useSelector((state) => state.category);
   const { foods } = useSelector((state) => state.food);
   const { orders, id } = useSelector((state) => state.order);
-
+  const { tables } = useSelector((state) => state.table);
+  const { musics } = useSelector((state) => state.music);
   const [select, setSelect] = useState("all");
   const [showAlert, setShowAlert] = useState(false);
   const [food, setFood] = useState("");
+  const hour = new Date().getHours();
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+  const tableId = localStorage.getItem("tableId");
+  const currentTable = tables.filter((c) => c._id == tableId)[0];
 
   const byCategory =
     select == "all" ? categories : categories.filter((c) => c.title == select);
@@ -54,10 +61,19 @@ const Home = () => {
       <div className="category-box">
         <div className="category-content">
           <div className="logo">Logo</div>
-          <i className="bi bi-bag" onClick={() => navigate("/order")}>
-            {" "}
-            {orders.length > 0 && <span>{orders.length}</span>}
-          </i>
+          <div className="order-header">
+            {currentTable?.forDJ == true ? (
+              <div>{/* <i className="bi bi-music-note-beamed"></i> */}</div>
+            ) : (
+              <div onClick={() => navigate("/karaoke")}>
+                Karaoke <img src={microphone} alt="" />
+              </div>
+            )}
+            <i className="bi bi-cart" onClick={() => navigate("/order")}>
+              {" "}
+              {orders.length > 0 && <span>{orders.length}</span>}
+            </i>
+          </div>
         </div>
       </div>
       <div className="category-content">
@@ -84,9 +100,7 @@ const Home = () => {
               onClick={() => navigate(`/category/${item.title}`)}
             >
               <img
-                src={`https://restoran-service.onrender.com/Images/${
-                  foods?.filter((c) => c.category === item.title)[0]?.image
-                }`}
+                src={foods?.filter((c) => c.category === item.title)[0]?.image}
                 alt=""
               />
               <span>{item.title}</span>

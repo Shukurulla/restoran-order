@@ -1,0 +1,100 @@
+.active-orange {
+  &:active {
+    color: #e75627;
+  }
+}
+
+.music-alert {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(90, 89, 89, 0.432);
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  .delete-info {
+    background: linear-gradient(130deg, #222b30f1, #2d3134);
+    width: 70%;
+    padding: 15px;
+    border-radius: 10px;
+    p {
+      span {
+        color: #e75627;
+        font-weight: 500;
+        font-size: 17px;
+      }
+    }
+    .buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
+.playing-musics {
+  background-color: #212a2f;
+  box-shadow: 2px 2px 15px #0b0d0ea4;
+  overflow-y: scroll;
+  padding: 5px;
+  height: 550px;
+  margin-top: 20px;
+  border-radius: 10px;
+  .table-name {
+    border-bottom: 1px solid #414040;
+    padding: 10px;
+    .complaint {
+      color: rgba(212, 40, 40, 0.932) !important;
+    }
+  }
+}
+
+.animation-line {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  span {
+    width: 4px;
+    height: 100%;
+    background-color: #e75627;
+    border-radius: 3px;
+    content: "";
+    animation: bounce 1.4s ease infinite alternate;
+  }
+  span {
+    &:nth-of-type(2) {
+      animation-delay: -2.2s; /* Start at the end of animation */
+    }
+
+    &:nth-of-type(3) {
+      animation-delay: -4.7s; /* Start mid-way of return of animation */
+    }
+  }
+
+  @keyframes bounce {
+    10% {
+      transform: scaleY(1); /* start by scaling to 30% */
+    }
+
+    30% {
+      transform: scaleY(0.7); /* scale up to 100% */
+    }
+
+    60% {
+      transform: scaleY(0.5); /* scale down to 50% */
+    }
+
+    80% {
+      transform: scaleY(0.7); /* scale up to 75% */
+    }
+
+    100% {
+      transform: scaleY(1); /* scale down to 60% */
+    }
+  }
+}

@@ -30,6 +30,9 @@ body {
   .swiper-pagination-bullet-active {
     background-color: #e75627 !important ;
   }
+  .swiper-pagination-bullet {
+    background-color: #fff;
+  }
 }
 .swiper-wrapper {
   gap: 10px;
@@ -75,6 +78,12 @@ body {
   font-size: 16px;
   position: relative;
 
+  .order-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+  }
   i {
     font-size: 20px;
     cursor: pointer;
@@ -115,16 +124,18 @@ body {
 }
 .home {
   padding-bottom: 60px;
+
   .category-content {
     width: 100%;
     position: relative;
     overflow-x: scroll;
     overflow-y: hidden;
 
-    height: 75px;
+    height: 90px;
     .categories {
       display: flex;
       padding: 10px 0 15px 0;
+      padding: 10px 0;
       position: absolute;
       &::-webkit-scrollbar {
         height: 4px;
@@ -137,9 +148,9 @@ body {
         display: none;
       }
       .category-item {
-        width: 30%;
+        width: 35%;
         padding: 5px;
-        font-size: 13px;
+        font-size: 14px;
         text-align: center;
         display: flex;
         align-items: center;
@@ -149,12 +160,12 @@ body {
         &.active {
           color: #e75627;
           img {
-            border: 2px solid #e75627;
+            border: 3px solid #e75627;
           }
         }
         img {
-          width: 50px;
-          height: 50px;
+          width: 60px;
+          height: 60px;
           border-radius: 45pc;
           object-fit: cover;
           border: 2px solid #313439;
@@ -173,9 +184,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 20px;
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 
     a {
       text-decoration: none;
@@ -206,7 +216,7 @@ body {
           font-weight: 600;
           padding-top: 14px;
           h4 {
-            font-size: 17px;
+            font-size: 16px;
           }
           h5 {
             font-size: 13px !important;
@@ -311,7 +321,7 @@ body {
 
     top: 0;
     padding: 0 10px;
-    background: linear-gradient(130deg, #222b30a1, #2d3134b9);
+    background: linear-gradient(130deg, #222b30a1, #2d3134be);
     border: 1px solid #313439;
     box-shadow: 10px 10px 15px #10121341;
     backdrop-filter: blur(5px);
@@ -344,7 +354,7 @@ body {
   display: grid;
   grid-template-columns: 40% 60%;
   width: 100%;
-  background: linear-gradient(130deg, #222b308a, #2d313496);
+  background: linear-gradient(130deg, #222b308a, #2d3134c4);
   border: 1px solid #313439;
   margin-top: 10px;
   border-radius: 5px;
@@ -371,10 +381,11 @@ body {
   }
   .order-info {
     padding: 15px;
-    font-size: 13px !important;
+    font-size: 14px !important;
 
     .order-title {
       font-weight: 500;
+      font-size: 17px;
     }
     .order-dosage {
       display: flex;
@@ -433,6 +444,9 @@ body {
     }
   }
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .msg {
   position: fixed;
   width: 100%;
@@ -480,6 +494,82 @@ body {
     }
   }
 }
+
+.music-box {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  color: #fff;
+  background: linear-gradient(130deg, #222b30fd, #2d3134);
+  box-shadow: 10px 10px 15px #10121341;
+  padding: 15px;
+  backdrop-filter: blur(15px);
+  font-size: 14px;
+  border-radius: 10px 10px 0 0;
+  transform: translateY(150%);
+  transition: 0.4s ease;
+
+  .service-info {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    justify-content: space-between;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  &.show {
+    transform: translateY(0%);
+  }
+  .title {
+    font-size: 20px;
+  }
+  .add-box {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    gap: 10px;
+    input {
+      outline-color: #e75627 !important;
+    }
+    button {
+      font-size: 13px;
+      padding: 5px;
+    }
+  }
+  .submit {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .select-music {
+    padding: 10px 0;
+    p {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      i {
+        cursor: pointer;
+      }
+      i.orange {
+        color: #e75627;
+      }
+    }
+  }
+}
+.cancel-btn {
+  background-color: #141414;
+}
+.l-2 {
+  left: 10px;
+}
+.relative {
+  position: relative;
+}
 @media (min-width: 580px) {
   body {
     width: 580px;
@@ -506,5 +596,10 @@ body {
     width: 580px;
     left: 50%;
     transform: translateX(-50%);
+  }
+  .music-box {
+    position: absolute;
+    bottom: 0;
+    width: 580px;
   }
 }

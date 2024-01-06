@@ -1,0 +1,36 @@
+.order-content {
+  height: auto !important;
+  padding: 20px 0 !important;
+}
+.orange {
+  color: #e75627;
+}
+.musics {
+  p {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    i {
+      cursor: pointer;
+      font-size: 13px;
+    }
+  }
+}
+.unknown {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: #ffffff57;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1111;
+  .unknown-box {
+    background: linear-gradient(130deg, #222b30fd, #2d3134);
+    width: 80%;
+    padding: 20px;
+    border-radius: 10px;
+  }
+}

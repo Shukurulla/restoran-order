@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Hamburger from "../../../public/hamburger.png";
 import "./karaoke.scss";
 import io from "socket.io-client";
+import MsgBox from "../../components/msg-box";
 const socket = io.connect("https://restoran-service.onrender.com");
 
 const Karakoe = () => {
@@ -10,16 +11,61 @@ const Karakoe = () => {
   const [msg, setMsg] = useState(false);
   const f = new Intl.NumberFormat("es-sp");
   const tableId = localStorage.getItem("tableId");
+  const equalTable = karaoke.filter((c) => c.tableId == tableId);
+  const [status, setStatus] = useState(false);
+
   const lat = localStorage.getItem("lat");
   const lon = localStorage.getItem("lon");
 
   const submitKaraoke = () => {
     try {
-      socket.emit("post_karaoke", { title: tableId, agent: { lat, lon } });
+      if (equalTable.filter((c) => c.place == "first").length > 0) {
+        socket.emit("post_karaoke", {
+          title: tableId,
+          tableId,
+          agent: { lat, lon },
+        });
+        socket.on("get_message", (data) => {
+          if (data.msg == "success") {
+            setMsg(true);
+            setStatus("success");
+          }
+          if (data.msg == "error") {
+            setMsg(true);
+            setStatus("error");
+          }
+        });
+      } else {
+        socket.emit("post_karaoke", {
+          title: tableId,
+          tableId,
+          place: "first",
+          agent: { lat, lon },
+        });
+        socket.on("get_message", (data) => {
+          if (data.msg == "success") {
+            setMsg(true);
+            setStatus("success");
+          }
+          if (data.msg == "error") {
+            setMsg(true);
+            setStatus("error");
+          }
+        });
+      }
     } catch (error) {}
+    console.log(equalTable.filter((c) => c.place == "first"));
   };
 
-  return (
+  useEffect(() => {
+    socket.on("get_message", (data) => {
+      console.log(data);
+    });
+  }, [socket]);
+
+  return msg ? (
+    <MsgBox status={status} />
+  ) : (
     <div className="relative w-100 text-light">
       <div className="karaoke-header">
         <h4>Karaoke</h4>
@@ -28,15 +74,10 @@ const Karakoe = () => {
         </div>
       </div>
       <div className="karaoke-body">
-        {msg == true && (
-          <div className="msg-box">
-            <h3>Buyurtmangiz qabul qilindi</h3>
-          </div>
-        )}
         <div className="karaoke-box">
           <h4>
             Karaoke uchun soatiga{" "}
-            <span className="orange">{f.format(karaoke[0].persent)}so'm</span>
+            <span className="orange">{f.format(20000)}so'm</span>
           </h4>
           <button onClick={() => submitKaraoke()}>Buyurtma berish</button>
         </div>

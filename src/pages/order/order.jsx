@@ -14,9 +14,8 @@ const socket = io.connect("https://restoran-service.onrender.com");
 const Order = () => {
   const { orders, sum, orderLength } = useSelector((state) => state.order);
   const { tables } = useSelector((state) => state.table);
-  const { discount } = useSelector((state) => state.discount);
   const { musics } = useSelector((state) => state.music);
-  const { ofitsiantService } = useSelector((state) => state.ofitsiant);
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
   const [msg, setMsg] = useState(false);
@@ -67,6 +66,18 @@ const Order = () => {
             dispatch(addSum([]));
           }
         });
+        socket.on("get_message", (data) => {
+          if (data.msg == "success") {
+            setMsg(true);
+            setStatus("success");
+            setMessage("Tez Orada buyurtmangiz yetkaziladi");
+          }
+          if (data.msg == "error") {
+            setMsg(true);
+            setStatus("error");
+            setMessage("Kechirasiz Tizimda xatolik ketti!!");
+          }
+        });
       } catch (error) {
         console.log(error);
       }
@@ -74,7 +85,7 @@ const Order = () => {
   };
 
   return msg ? (
-    <MsgBox status={status} />
+    <MsgBox status={status} message={message} />
   ) : (
     <div className="order">
       {unknown && <Unknown setState={setUnknown} />}

@@ -138,7 +138,7 @@ const Category = () => {
               </div>
               <div className="food-info">
                 <div className="navigate">
-                  <h4 className="p-0 m-0">{item.foodName}</h4>
+                  <p className="p-0 m-0">{item.foodName}</p>
                 </div>
                 <div className="d-flex mt-2 justify-content-between align-items-center text-start">
                   {hour > 11 && hour < 14 ? (

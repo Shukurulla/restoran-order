@@ -124,7 +124,20 @@ body {
 }
 .home {
   padding-bottom: 60px;
-
+  position: relative;
+  .call-alert {
+    position: fixed;
+    z-index: 999;
+    min-width: 580px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #181b1dcb;
+    left: 50%;
+    transform: translateX(-50%);
+  }
   .category-content {
     width: 100%;
     position: relative;

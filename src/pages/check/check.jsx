@@ -41,12 +41,23 @@ const Check = () => {
   var farq = hozirgiVaqt - buyurtmaVaqtiObj;
   var farqDaqiqa = Math.floor(farq / (1000 * 60));
   const tablePrice =
-    (tables.filter((c) => c._id == id)[0].surcharge / 60) * farqDaqiqa;
+    (tables?.filter((c) => c._id == id)[0]?.surcharge / 60) * farqDaqiqa;
+
+  // Karaoke
+  const karaoke = equalTables?.filter((c) => c.orderType == "karaoke");
+
+  var karaokeTime = new Date(karaoke[0]?.savedOrder.item?.orderedAt);
+  var now = hozirgiVaqt - karaokeTime;
+  var minutes = Math.floor(now / (1000 * 60));
 
   // TotalPrice
   const ofitsiantPersent = hour > 18 && hour > 4 ? 15 / 100 : 10 / 100;
 
-  const totalPrice = foodPrice + +musicPrice + tablePrice;
+  const totalPrice =
+    (minutes ? minutes * (20000 / 60) : 0) +
+    foodPrice +
+    +musicPrice +
+    tablePrice;
   const isDiscount =
     discount === 0
       ? totalPrice + totalPrice * ofitsiantPersent
@@ -81,14 +92,14 @@ const Check = () => {
       <>
         <div className="check-content" id="check-content" ref={checkRef}>
           <h3 className="text-center">
-            {tables.filter((c) => c._id == id)[0].tableNumber}-stol
+            {tables?.filter((c) => c._id == id)[0].tableNumber}-stol
           </h3>
           <ul className="check">
             <p className="report">Barcha hisobotlar</p>
             <li>
               <li className="title">
                 Vaqt (soatiga{" "}
-                {f.format(tables.filter((c) => c._id == id)[0].surcharge)}
+                {f.format(tables?.filter((c) => c._id == id)[0].surcharge)}
                 so'm) :
               </li>
 
@@ -127,19 +138,22 @@ const Check = () => {
                       )
                     );
                     return (
-                      <li>
+                      <li className="check-food-item">
                         {uniqueArray.map((id) => (
                           <p className="m-0 p-0">
-                            {
-                              item.savedOrder.allOrders.filter(
-                                (c) => c._id == id
-                              ).length
-                            }{" "}
-                            {
-                              item.savedOrder.allOrders.filter(
-                                (c) => c._id == id
-                              )[0]?.foodName
-                            }
+                            <span>
+                              {" "}
+                              {
+                                item.savedOrder.allOrders.filter(
+                                  (c) => c._id == id
+                                ).length
+                              }{" "}
+                              {
+                                item.savedOrder.allOrders.filter(
+                                  (c) => c._id == id
+                                )[0]?.foodName
+                              }
+                            </span>
                           </p>
                         ))}
                       </li>
@@ -162,10 +176,26 @@ const Check = () => {
                 </ul>
               </li>
             )}
+            {karaoke.length > 0 && (
+              <li>
+                Karaoke uchun 20.000 so'm:
+                <ul>
+                  <li>
+                    Bandlik:{" "}
+                    {parseInt(minutes / 60) > 0
+                      ? `${parseInt(minutes / 60)} soat ${minutes % 60} daqiqa`
+                      : `${minutes} daqiqa`}
+                  </li>
+                  <li>
+                    Jami: {f.format((minutes * (20000 / 60)).toFixed())} som
+                  </li>
+                </ul>
+              </li>
+            )}
             <li className="">
               Tushlik uchun (12:00-15:00) chegirma 10%:{" "}
               {firstOrder.savedOrder.discount == true
-                ? `${f.format(totalPrice * 0.1)} so'm`
+                ? `${f.format((totalPrice * 0.1).toFixed(0))} so'm`
                 : "chegirma mavjud emas"}
             </li>
             <li className="">
@@ -187,7 +217,7 @@ const Check = () => {
       </>
     </div>
   ) : (
-    <div className="relative text-light msg">Buyrtmalar mavjud emas</div>
+    <div className="relative text-light msg">Buyurtmalar mavjud emas</div>
   );
 };
 

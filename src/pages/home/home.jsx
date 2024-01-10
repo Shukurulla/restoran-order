@@ -12,23 +12,31 @@ import {
 import { useNavigate } from "react-router-dom";
 import microphone from "../../../public/microphone.png";
 import hamburger from "../../../public/hamburger.png";
+import io from "socket.io-client";
+import MsgBox from "../../components/msg-box";
+
+const socket = io.connect("https://restoran-service.onrender.com");
 
 const Home = () => {
   const { categories } = useSelector((state) => state.category);
   const { foods } = useSelector((state) => state.food);
   const { orders, id } = useSelector((state) => state.order);
   const { tables } = useSelector((state) => state.table);
-  const { musics } = useSelector((state) => state.music);
   const [select, setSelect] = useState("all");
   const [showAlert, setShowAlert] = useState(false);
   const [food, setFood] = useState("");
-  const hour = new Date().getHours();
+  const [showCall, setShowCall] = useState(false);
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const tableId = localStorage.getItem("tableId");
+  const lat = localStorage.getItem("lat");
+  const lon = localStorage.getItem("lon");
   const currentTable = tables.filter((c) => c._id == tableId)[0];
+  const [msg, setMsg] = useState(false);
+  const [status, setStatus] = useState("");
+  const [message, setMessage] = useState("");
 
   const byCategory =
     select == "all" ? categories : categories.filter((c) => c.title == select);
@@ -51,17 +59,64 @@ const Home = () => {
     dispatch(addSum(totalSum));
   }, [food, id, orders]);
 
-  return (
-    <div className="home">
+  const callOfitsiant = () => {
+    const schema = {
+      tableId,
+      tableName: tables.filter((c) => c._id == tableId)[0].title,
+      tableNumber: tables.filter((c) => c._id == tableId)[0].tableNumber,
+      agent: {
+        lat,
+        lon,
+      },
+    };
+    socket.emit("call", schema);
+    console.log(schema);
+
+    socket.on("call-response", (data) => {
+      console.log(data);
+      if (data.msg == "successfully") {
+        setMsg(true);
+        setStatus("success");
+        setMessage(
+          "So'rovingiz yetkazildi. Tez orada sizga xizmat ko'rsatishadi"
+        );
+      } else {
+        setMsg(true);
+        setStatus("error");
+        setMessage("Tizimda hatolik ketti! Iltimos qayta urunib koring");
+      }
+    });
+  };
+
+  return msg ? (
+    <MsgBox status={status} message={message} />
+  ) : (
+    <div className="home relative">
       <Alert
         msg={`Siz savatga ${food.foodName}ni qoshdingiz`}
         className={showAlert}
         setState={setShowAlert}
       />
+      {showCall && (
+        <div className="call-alert ">
+          <div className="call-box">
+            <h4>Ofitsiyantni chaqirmoqchimisiz? </h4>
+            <div className="d-flex gap-3">
+              <button className="cancel-btn" onClick={() => setShowCall(false)}>
+                Orqaga
+              </button>
+              <button className="" onClick={() => callOfitsiant()}>
+                Chaqish
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="category-box">
         <div className="category-content">
           <div className="logo">Logo</div>
           <div className="order-header">
+            <i className="bi bi-bell" onClick={() => setShowCall(true)}></i>
             {currentTable?.forDJ == true ? (
               <div>{/* <i className="bi bi-music-note-beamed"></i> */}</div>
             ) : (

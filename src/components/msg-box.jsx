@@ -1,7 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const MsgBox = ({ status }) => {
+const MsgBox = ({ status, message }) => {
+  const navigate = useNavigate();
+
+  const navigateHandler = async () => {
+    await navigate("/");
+    window.location.reload();
+  };
+
   return (
     <div className={`msg ${status == "success" ? "success" : "failure"}`}>
       <div className="msg-box">
@@ -10,12 +17,8 @@ const MsgBox = ({ status }) => {
             status == "success" ? "bi-check2-circle" : "bi-x-circle text-danger"
           }`}
         ></i>
-        <p className="text-center">
-          {status == "success"
-            ? "Tez orada buyurtmangiz yetkaziladi"
-            : "Kechirasiz hatolik yuz berdi"}
-        </p>
-        <Link to={"/"}>Menuga qaytish</Link>
+        <p className="text-center">{message}</p>
+        <button onClick={() => navigateHandler()}>Bosh menuga qaytish</button>
       </div>
     </div>
   );

@@ -45,8 +45,9 @@ const Check = () => {
 
   // Karaoke
   const karaoke = equalTables?.filter((c) => c.orderType == "karaoke");
+  console.log(karaoke);
 
-  var karaokeTime = new Date(karaoke[0]?.savedOrder.item?.orderedAt);
+  var karaokeTime = new Date(karaoke[0]?.savedOrder.orderedAt);
   var now = hozirgiVaqt - karaokeTime;
   var minutes = Math.floor(now / (1000 * 60));
 
@@ -54,21 +55,15 @@ const Check = () => {
   const ofitsiantPersent = hour > 18 && hour > 4 ? 15 / 100 : 10 / 100;
 
   const totalPrice =
-    (minutes ? minutes * (20000 / 60) : 0) +
-    foodPrice +
-    +musicPrice +
-    tablePrice;
-  const isDiscount =
-    discount === 0
-      ? totalPrice + totalPrice * ofitsiantPersent
-      : totalPrice -
-        (totalPrice + totalPrice * ofitsiantPersent * 10) / 100 +
-        (totalPrice - (totalPrice + totalPrice * ofitsiantPersent * 10) / 100) *
-          ofitsiantPersent;
+    (minutes ? minutes * (20000 / 60) : 0) + foodPrice + tablePrice;
 
   //Ofitsiant
-  const ofitsiantPrice = isDiscount * ofitsiantPersent;
+  const ofitsiantPrice = totalPrice * ofitsiantPersent;
 
+  const isDiscount =
+    discount === 0
+      ? totalPrice + ofitsiantPrice
+      : totalPrice + ofitsiantPrice - (totalPrice + ofitsiantPrice) * 0.1;
   const f = new Intl.NumberFormat("es-sp");
   useEffect(() => {
     console.log(equalTables);

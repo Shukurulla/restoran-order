@@ -41,7 +41,7 @@ const Main = () => {
     <div className="relative text-light main">
       <div className="title-box">
         <h2>
-          <span className="orange">Karavan</span> Restoraniga xush kelibsiz!!!
+          <span className="orange">KepKet</span> Restoraniga xush kelibsiz!!!
         </h2>
 
         <p>Bu yerda siz buyurtmalarni online yuborishingiz mumkin</p>

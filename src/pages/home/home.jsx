@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import MsgBox from "../../components/msg-box";
 
-const socket = io.connect("https://api.kepket.uz");
+const socket = io.connect("https://kepket.kerek.uz");
 
 const Home = () => {
   const { categories } = useSelector((state) => state.category);

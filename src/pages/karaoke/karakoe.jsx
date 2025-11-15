@@ -4,7 +4,7 @@ import Hamburger from "../../../public/hamburger.png";
 import "./karaoke.scss";
 import io from "socket.io-client";
 import MsgBox from "../../components/msg-box";
-const socket = io.connect("https://api.kepket.uz");
+const socket = io.connect("https://kepket.kerek.uz");
 
 const Karakoe = () => {
   const { karaoke } = useSelector((state) => state.karaoke);

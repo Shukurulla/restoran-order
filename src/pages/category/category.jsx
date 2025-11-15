@@ -88,7 +88,7 @@ const Category = () => {
               className="bi bi-arrow-left"
               onClick={() => navigate("/home")}
             ></div>
-            <div className="logo">Logo</div>
+            <div className="logo">KepKet</div>
             <i className="bi bi-bag" onClick={() => navigate("/order")}>
               {" "}
               {orders.length > 0 && <span>{orders.length}</span>}

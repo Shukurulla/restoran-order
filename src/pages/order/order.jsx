@@ -9,7 +9,7 @@ import "./order.scss";
 import Unknown from "./unknown";
 import io from "socket.io-client";
 
-const socket = io.connect("https://restoran-service.onrender.com");
+const socket = io.connect("https://api.kepket.uz");
 
 const Order = () => {
   const { orders, sum, orderLength } = useSelector((state) => state.order);

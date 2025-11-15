@@ -8,7 +8,6 @@ import DiscountReducer from "../slice/discount";
 import DjReducer from "../slice/dj-slice";
 import OfitsiantService from "../slice/ofitsiant-slice";
 import MusicReducer from "../slice/music";
-import KaraokeReducer from "../slice/karaoke-slice";
 import SavedReducer from "../slice/saved";
 
 const store = configureStore({
@@ -22,7 +21,6 @@ const store = configureStore({
     dj: DjReducer,
     ofitsiant: OfitsiantService,
     music: MusicReducer,
-    karaoke: KaraokeReducer,
     saved: SavedReducer,
   },
   devTools: process.env.NODE_ENV != "production",

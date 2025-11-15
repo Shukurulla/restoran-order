@@ -7,7 +7,6 @@ import Bearer from "./components/bearer";
 import Category from "./pages/category/category";
 import Check from "./pages/check/check";
 import Home from "./pages/home/home";
-import Karakoe from "./pages/karaoke/karakoe";
 import Main from "./pages/main/main";
 import Music from "./pages/music/music";
 import Order from "./pages/order/order";
@@ -31,7 +30,6 @@ import { getDevice, getIpAddress } from "./redux/slice/user";
 import CategoryService from "./service/category-service";
 import discountService from "./service/discount";
 import FoodService from "./service/food-service";
-import KaraokeService from "./service/karaoke";
 import MusicService from "./service/music-service";
 import OfitsiantService from "./service/ofitsiant-service";
 import SavedServeice from "./service/saved";
@@ -98,7 +96,6 @@ function App() {
     getDiscount();
     djService.getDjService(dispatch);
     OfitsiantService.getOfitsiant(dispatch);
-    KaraokeService.getKaraoke(dispatch);
     SavedServeice.getSaved(dispatch);
   }, []);
 
@@ -125,7 +122,6 @@ function App() {
           <Route path="/menu/table/:id" element={<Bearer />} />
           <Route path="/check/table/:id" element={<Check />} />
           <Route path="/music" element={<Music />} />
-          <Route path="/karaoke" element={<Karakoe />} />
         </Routes>
       </div>
     </div>

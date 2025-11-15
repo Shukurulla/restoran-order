@@ -10,12 +10,10 @@ import {
   addSum,
 } from "../../redux/slice/order-slice";
 import { useNavigate } from "react-router-dom";
-import microphone from "../../../public/microphone.png";
-import hamburger from "../../../public/hamburger.png";
 import io from "socket.io-client";
 import MsgBox from "../../components/msg-box";
 
-const socket = io.connect("https://restoran-service.onrender.com");
+const socket = io.connect("https://api.kepket.uz");
 
 const Home = () => {
   const { categories } = useSelector((state) => state.category);
@@ -98,15 +96,22 @@ const Home = () => {
         setState={setShowAlert}
       />
       {showCall && (
-        <div className="call-alert ">
+        <div className="call-alert">
           <div className="call-box">
-            <h4>Ofitsiyantni chaqirmoqchimisiz? </h4>
-            <div className="d-flex gap-3">
+            <div className="call-icon">
+              <i className="bi bi-bell-fill"></i>
+            </div>
+            <h3>Ofitsiyantni chaqirish</h3>
+            <p>
+              Sizga yordam kerakmi? Ofitsiyantni chaqiring va tez orada xizmat
+              ko'rsatiladi.
+            </p>
+            <div className="call-buttons">
               <button className="cancel-btn" onClick={() => setShowCall(false)}>
-                Orqaga
+                <i className="bi bi-x-circle"></i> Bekor qilish
               </button>
-              <button className="" onClick={() => callOfitsiant()}>
-                Chaqish
+              <button className="confirm-btn" onClick={() => callOfitsiant()}>
+                <i className="bi bi-bell"></i> Chaqirish
               </button>
             </div>
           </div>
@@ -114,16 +119,9 @@ const Home = () => {
       )}
       <div className="category-box">
         <div className="category-content">
-          <div className="logo">Logo</div>
+          <div className="logo">KepKet</div>
           <div className="order-header">
             <i className="bi bi-bell" onClick={() => setShowCall(true)}></i>
-            {currentTable?.forDJ == true ? (
-              <div>{/* <i className="bi bi-music-note-beamed"></i> */}</div>
-            ) : (
-              <div onClick={() => navigate("/karaoke")}>
-                Karaoke <img src={microphone} alt="" />
-              </div>
-            )}
             <i className="bi bi-cart" onClick={() => navigate("/order")}>
               {" "}
               {orders.length > 0 && <span>{orders.length}</span>}
